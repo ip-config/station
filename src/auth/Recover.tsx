@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { SignUpNext, Seed, Address, Wallet } from '@terra-money/use-station'
+import { SignUpNext, Seed } from '@terra-money/use-station'
 import { useSignUp } from '@terra-money/use-station'
-import { electron } from '../utils'
+import { generateAddresses, generateWallet } from '../utils'
 import { importKey, loadKeys } from '../utils/localStorage'
 import Form from '../components/Form'
 import ModalContent from '../components/ModalContent'
@@ -16,13 +16,8 @@ const Recover = ({ generated }: { generated?: Seed }) => {
   const modal = useAuthModal()
   const { form, mnemonics, warning, next, reset, error } = useSignUp({
     generated,
-    generateAddresses: async (phrase: string) =>
-      await electron<Promise<[Address, Address]>>('generateAddresses', phrase),
-    generateWallet: async (phrase, bip) => {
-      const params = [phrase, bip]
-      const wallet = await electron<Wallet>('generateWalletFromSeed', params)
-      return wallet
-    },
+    generateAddresses,
+    generateWallet,
     submit: importKey,
     isNameExists: (name: string) => isExists('name', name),
     isAddressExists: (address: string) => isExists('address', address),

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { cond, equals } from 'ramda'
 import c from 'classnames'
 import { useManageAccounts } from '@terra-money/use-station'
-import { electron } from '../utils'
+import { decrypt } from '../utils'
 import { loadKeys, storeKeys, importKey } from '../utils/localStorage'
 import ModalContent from '../components/ModalContent'
 import Confirm from '../components/Confirm'
@@ -38,7 +38,7 @@ const ManageAccounts = ({ modalActions, onFinish }: Props) => {
   const account = accounts[currentIndex]
   const changePassword = async ({ current, password }: Params) => {
     const { name, wallet } = account
-    const decrypted = electron<string>('decrypt', [wallet, current])
+    const decrypted = decrypt(wallet, current)
     const parsed = JSON.parse(decrypted)
 
     deleteAccount()

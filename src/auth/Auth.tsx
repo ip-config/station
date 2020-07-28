@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react'
 import { useAuthMenu } from '@terra-money/use-station'
 import { AuthMenuKey, AuthMenuItem } from '@terra-money/use-station'
 import semver from 'semver'
-import { isElectron } from '../utils/env'
+import { isElectron, isExtension } from '../utils/env'
 import { electron } from '../utils'
 import { loadKeys } from '../utils/localStorage'
 import { useApp } from '../hooks'
@@ -35,6 +35,8 @@ const getAuthMenuKeys = (): AuthMenuKey[] => {
     }
 
     return ['signInWithLedger', 'signIn', 'signUp', 'recover']
+  } else if (isExtension) {
+    return ['signIn', 'signUp', 'recover']
   }
 
   return ['signInWithLedger', 'download']

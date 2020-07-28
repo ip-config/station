@@ -12,7 +12,9 @@
     "@ledgerhq/hw-transport-webusb": "^5.15.0",
     "@sentry/browser": "^5.13.0",
     "@terra-money/ledger-terra-js": "^1.1",
+    "@terra-money/terra.js": "^0.4.10",
     "@terra-money/use-station": "^3.8.11",
+    "@types/chrome": "^0.0.122",
     "@types/numeral": "^0.0.28",
     "@ungap/url-search-params": "^0.2",
     "ace-builds": "^1.4.12",
@@ -82,7 +84,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "ext": "REACT_APP_ENV=extension INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
