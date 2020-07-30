@@ -16,9 +16,10 @@ import s from './Confirmation.module.scss'
 interface Props {
   confirm: ConfirmProps
   modal: Modal
+  onResult?: () => void
 }
 
-const Confirmation = ({ confirm, modal }: Props) => {
+const Confirmation = ({ confirm, modal, onResult }: Props) => {
   const { user } = useAuth()
 
   const { contents, fee, form, ledger, result } = useConfirm(confirm, {
@@ -33,6 +34,11 @@ const Confirmation = ({ confirm, modal }: Props) => {
       return signedTx
     },
   })
+
+  useEffect(() => {
+    !!result && onResult && onResult() // Success? Fail?
+    // eslint-disable-next-line
+  }, [!!result])
 
   /* prevent to close modal */
   useEffect(() => {

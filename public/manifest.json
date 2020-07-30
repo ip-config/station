@@ -4,6 +4,18 @@
   "version": "1.0.0",
 
   "options_page": "index.html",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
   "browser_action": {
     "default_popup": "index.html",
     "default_icon": "icon-32.png"
