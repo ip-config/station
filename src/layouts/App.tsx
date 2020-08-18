@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom'
 import { ToastContainer, Slide } from 'react-toastify'
 import { ToastContainerProps } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { without, uniq } from 'ramda'
+import { without } from 'ramda'
 import axios from 'axios'
 
 import { useConfigState, ConfigProvider, User } from '@terra-money/use-station'
@@ -29,6 +29,10 @@ import UpdateElectron from './UpdateElectron'
 import ConnectRequested from './ConnectRequested'
 import s from './App.module.scss'
 import Confirmation from '../post/Confirmation'
+import useExtension, {
+  useCheckConnectRequested,
+  useCheckConfirmRequested,
+} from '../extension/useExtension'
 
 const App = () => {
   useScrollToTop()
@@ -68,7 +72,7 @@ const App = () => {
   /* auth modal */
   const authModal = useAuthModal(modal, user)
 
-  /* cx */
+  /* extension */
   const connectRequested = useCheckConnectRequested()
   useEffect(() => {
     connectRequested.list.length &&
@@ -89,6 +93,8 @@ const App = () => {
       <Confirmation modal={modal} confirm={payload} onResult={onResult} />
     )
   )
+
+  useExtension()
 
   /* render */
   const key = [currentLang, currentChain, currentCurrency, appKey].join()
@@ -130,51 +136,6 @@ const ToastConfig: ToastContainerProps = {
 }
 
 /* hooks */
-const useCheckConnectRequested = (): {
-  list: string[]
-  allow: (origin: string) => void
-} => {
-  const [list, setList] = useState<string[]>([])
-
-  useEffect(() => {
-    chrome.storage.local.get(
-      ['connectRequested'],
-      ({ connectRequested = [] }) => setList(connectRequested)
-    )
-  }, [])
-
-  const allow = (origin: string) => {
-    const next = without([origin], list)
-    chrome.storage.local.get(['connectAllowed'], ({ connectAllowed = [] }) =>
-      chrome.storage.local.set(
-        {
-          connectRequested: next,
-          connectAllowed: uniq([...connectAllowed, origin]),
-        },
-        () => setList(next)
-      )
-    )
-  }
-
-  return { list, allow }
-}
-
-const useCheckConfirmRequested = (
-  callback: (payload: any, onResult: () => void) => void
-) => {
-  useEffect(() => {
-    chrome.storage.local.get(['confirm'], ({ confirm }) => {
-      if (!!confirm) {
-        callback(confirm, () =>
-          chrome.storage.local.set({ confirm: null, posted: 'true' })
-        )
-      }
-    })
-
-    // eslint-disable-next-line
-  }, [])
-}
-
 const useCheckElectronVersion = (modal: Modal, onCheck: () => void) => {
   const [deprecatedUI, setDeprecatedUI] = useState<ReactNode>()
 

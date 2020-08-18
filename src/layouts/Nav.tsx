@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import c from 'classnames'
 import { useMenu, ErrorBoundary, useConfig } from '@terra-money/use-station'
 import { ReactComponent as TerraStation } from '../images/TerraStation.svg'
+import { isExtension } from '../utils/env'
 import Icon from '../components/Icon'
 import NavItem from './NavItem'
 import Guide from './Guide'
@@ -40,7 +41,15 @@ const Nav = () => {
     close()
   }, [pathname])
 
-  return (
+  return isExtension ? (
+    <nav className={s.nav}>
+      <header className={s.header}>
+        <Link to="/" className={s.logo}>
+          <TerraStation />
+        </Link>
+      </header>
+    </nav>
+  ) : (
     <nav className={s.nav}>
       <header className={s.header}>
         <Link to="/" className={s.logo}>

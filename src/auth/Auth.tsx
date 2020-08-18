@@ -90,6 +90,8 @@ const Auth = () => {
   const glance = () => setCurrentKey('signInWithAddress')
   const download = () => setCurrentKey('download')
 
+  const showFooter = !isElectron && !isExtension
+
   return currentKey ? (
     <AuthModalProvider value={modalActions}>
       {components[currentKey]['render']()}
@@ -97,7 +99,7 @@ const Auth = () => {
   ) : (
     <ModalContent close={modalActions.close}>
       <AuthMenu list={list.map(getItem)} onSelect={setCurrentKey} />
-      {!isElectron && (
+      {showFooter && (
         <AuthFooter
           {...ui.web}
           onClickGlance={glance}
