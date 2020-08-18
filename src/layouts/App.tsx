@@ -21,7 +21,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import ErrorComponent from '../components/ErrorComponent'
 import ModalContent from '../components/ModalContent'
 import Modal from '../components/Modal'
-import Auth from '../auth/Auth'
+import AuthModal from '../auth/AuthModal'
 
 import Nav from './Nav'
 import Header from './Header'
@@ -185,7 +185,7 @@ const useRedirectOnChainChange = ({
 
 const useAuthModal = (modal: Modal, user?: User) => {
   const authModal = {
-    open: () => modal.open(<Auth />),
+    open: () => modal.open(<AuthModal />),
     close: () => modal.close(),
   }
 

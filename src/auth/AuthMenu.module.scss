@@ -3,6 +3,8 @@
 
 .item {
   @include flex();
+
+  color: $brand;
   padding: 20px;
   position: relative;
   overflow: visible;

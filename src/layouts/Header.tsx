@@ -28,7 +28,14 @@ const Header = ({ className }: { className: string }) => {
   return (
     <header className={c(s.header, className)}>
       {isExtension ? (
-        user && <User {...user} />
+        user && (
+          <>
+            <User {...user} />
+            <button onClick={signOut} className="btn-icon">
+              <Icon name="exit_to_app" size={20} />
+            </button>
+          </>
+        )
       ) : (
         <div className={s.container}>
           <div className={s.user}>
