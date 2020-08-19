@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useSignIn } from '@terra-money/use-station'
 import { loadKeys, testPassword } from '../utils/localStorage'
-import { useAuthModal } from './useAuthModal'
-import ModalContent from '../components/ModalContent'
 import Form from '../components/Form'
 import Icon from '../components/Icon'
 import ManageAccounts from './ManageAccounts'
@@ -14,9 +12,6 @@ const SignIn = () => {
     list: accounts,
     test: ({ name, password }) => testPassword(name, password),
   })
-
-  /* modal */
-  const modal = useAuthModal()
 
   /* settings */
   const [settings, setSettings] = useState(false)
@@ -32,14 +27,9 @@ const SignIn = () => {
   ) : undefined
 
   return settings ? (
-    <ManageAccounts
-      modalActions={{ ...modal, goBack: () => setSettings(false) }}
-      onFinish={modal.goBack}
-    />
+    <ManageAccounts onFinish={() => {}} />
   ) : (
-    <ModalContent {...modal}>
-      <Form form={form} h2={h2} />
-    </ModalContent>
+    <Form form={form} h2={h2} />
   )
 }
 

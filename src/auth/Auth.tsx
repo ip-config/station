@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react'
-import { useAuthMenu } from '@terra-money/use-station'
+import React, { ReactNode, useEffect } from 'react'
+import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom'
+import { useAuthMenu, useAuth } from '@terra-money/use-station'
 import { AuthMenuKey, AuthMenuItem } from '@terra-money/use-station'
 import { isElectron, isExtension } from '../utils/env'
 import { loadKeys } from '../utils/localStorage'
@@ -23,21 +24,29 @@ export interface Item {
 }
 
 const Auth = () => {
+  const { user } = useAuth()
+  const { replace } = useHistory()
+  const { path, url } = useRouteMatch()
+
+  useEffect(() => {
+    user && isExtension && replace('/wallet')
+  }, [user, replace])
+
   const components: { [key in AuthMenuKey]: Omit<Item, 'title' | 'key'> } = {
     recover: {
       icon: 'settings_backup_restore',
-      path: '/recover',
+      path: url + '/recover',
       render: () => <Recover />,
     },
     signUp: {
       icon: 'add_circle_outline',
-      path: '/new',
+      path: url + '/new',
       render: () => <SignUp />,
     },
     signIn: {
       icon: 'radio_button_checked',
       disabled: !loadKeys().length,
-      path: '/select',
+      path: url + '/select',
       render: () => <SignIn />,
     },
     signInWithAddress: {
@@ -62,14 +71,16 @@ const Auth = () => {
   const getItem = ({ label, key }: AuthMenuItem) =>
     Object.assign({}, { title: label, key }, components[key])
 
-  const menu = list.map(getItem)
-  const showFooter = !isElectron && !isExtension
+  const footer = !isElectron && !isExtension && <AuthFooter {...ui.web} />
+  const menu = <AuthMenu list={list.map(getItem)} footer={footer} />
 
   return (
-    <>
-      <AuthMenu list={menu} />
-      {showFooter && <AuthFooter {...ui.web} />}
-    </>
+    <Switch>
+      <Route path={path + '/'} exact render={() => menu} />
+      <Route path={path + '/select'} component={SignIn} />
+      <Route path={path + '/new'} component={SignUp} />
+      <Route path={path + '/recover'} component={Recover} />
+    </Switch>
   )
 }
 

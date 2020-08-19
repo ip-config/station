@@ -12,7 +12,7 @@ import { LangKey } from '@terra-money/use-station'
 
 import { Chains } from '../chains'
 import { electron, report } from '../utils'
-import { isElectron } from '../utils/env'
+import { isElectron, isExtension } from '../utils/env'
 import { localSettings } from '../utils/localStorage'
 import { useScrollToTop, useModal, AppProvider } from '../hooks'
 import routes from './routes'
@@ -108,7 +108,7 @@ const App = () => {
           <Nav />
           <section className={s.main}>
             <Header className={s.header} />
-            <section className={s.content}>
+            <section className={isExtension ? s.extension : s.content}>
               <ErrorBoundary fallback={<ErrorComponent card />} key={pathname}>
                 {routes}
               </ErrorBoundary>

@@ -5,7 +5,6 @@ import c from 'classnames'
 import { useManageAccounts } from '@terra-money/use-station'
 import { decrypt } from '../utils'
 import { loadKeys, storeKeys, importKey } from '../utils/localStorage'
-import ModalContent from '../components/ModalContent'
 import Confirm from '../components/Confirm'
 import Icon from '../components/Icon'
 import Pop from '../components/Pop'
@@ -14,12 +13,11 @@ import ChangePassword from './ChangePassword'
 import DeleteAccount from './DeleteAccount'
 import s from './ManageAccounts.module.scss'
 
-type Props = {
-  modalActions: { goBack: () => void; close: () => void }
+interface Props {
   onFinish: () => void
 }
 
-const ManageAccounts = ({ modalActions, onFinish }: Props) => {
+const ManageAccounts = ({ onFinish }: Props) => {
   const { title, password } = useManageAccounts()
   const { tooltip, ...toastProps } = password
   const Page = { PW: 'ChangePassword', DEL: 'DeleteAccount' }
@@ -121,13 +119,7 @@ const ManageAccounts = ({ modalActions, onFinish }: Props) => {
     ],
   ])(currentPage)
 
-  return (
-    <ModalContent
-      {...Object.assign({}, modalActions, currentPage && { goBack: init })}
-    >
-      {renderPage || main}
-    </ModalContent>
-  )
+  return <>{renderPage || main}</>
 }
 
 export default ManageAccounts

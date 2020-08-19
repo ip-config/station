@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import c from 'classnames'
 import Icon from '../components/Icon'
@@ -7,6 +7,7 @@ import s from './AuthMenu.module.scss'
 
 interface Props {
   list: Item[]
+  footer: ReactNode
   onSelect?: (item: Item) => void
 }
 
@@ -28,12 +29,15 @@ const AuthMenuItem = ({ title, icon, path, disabled }: Omit<Item, 'key'>) => {
   ) : null
 }
 
-const AuthMenu = ({ list }: Props) => (
-  <div className={s.list}>
-    {list.map((item) => (
-      <AuthMenuItem {...item} key={item.title} />
-    ))}
-  </div>
+const AuthMenu = ({ list, footer }: Props) => (
+  <>
+    <div className={s.list}>
+      {list.map((item) => (
+        <AuthMenuItem {...item} key={item.title} />
+      ))}
+    </div>
+    {footer}
+  </>
 )
 
 export default AuthMenu

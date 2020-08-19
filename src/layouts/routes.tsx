@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { isExtension } from '../utils/env'
-import ErrorComponent from '../components/ErrorComponent'
+
 import Dashboard from '../pages/dashboard/Dashboard'
 import Bank from '../pages/bank/Bank'
 import Txs from '../pages/txs/Txs'
@@ -12,7 +12,9 @@ import Governance from '../pages/governance/Governance'
 import Proposal from '../pages/proposal/Proposal'
 import Contracts from '../pages/contracts/Contracts'
 import Extension from '../extension/Extension'
+
 import Auth from '../auth/Auth'
+import ErrorComponent from '../components/ErrorComponent'
 
 export default isExtension ? (
   <Switch>
