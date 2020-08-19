@@ -14,6 +14,7 @@ import Contracts from '../pages/contracts/Contracts'
 import Extension from '../extension/Extension'
 
 import Auth from '../auth/Auth'
+import Connect from '../extension/Connect'
 import ErrorComponent from '../components/ErrorComponent'
 
 export default isExtension ? (
@@ -21,6 +22,7 @@ export default isExtension ? (
     <Route path="/" component={Extension} exact />
     <Route path="/wallet" component={Bank} />
     <Route path="/auth" component={Auth} />
+    <Route path="/connect" component={Connect} />
     <Route render={() => <ErrorComponent card />} />
   </Switch>
 ) : (

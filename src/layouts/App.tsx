@@ -23,16 +23,13 @@ import ModalContent from '../components/ModalContent'
 import Modal from '../components/Modal'
 import AuthModal from '../auth/AuthModal'
 
+import { useExtensionRequested } from '../extension/useExtension'
+import { ExtensionProvider } from '../extension/useExtension'
+
 import Nav from './Nav'
 import Header from './Header'
 import UpdateElectron from './UpdateElectron'
-import ConnectRequested from './ConnectRequested'
 import s from './App.module.scss'
-import Confirmation from '../post/Confirmation'
-import useExtension, {
-  useCheckConnectRequested,
-  useCheckConfirmRequested,
-} from '../extension/useExtension'
 
 const App = () => {
   useScrollToTop()
@@ -73,28 +70,7 @@ const App = () => {
   const authModal = useAuthModal(modal, user)
 
   /* extension */
-  const connectRequested = useCheckConnectRequested()
-  useEffect(() => {
-    connectRequested.list.length &&
-      modal.open(
-        <ConnectRequested
-          list={connectRequested.list}
-          onAllow={(origin) => {
-            connectRequested.allow(origin)
-            modal.close()
-          }}
-        />
-      )
-    // eslint-disable-next-line
-  }, [connectRequested.list.length])
-
-  useCheckConfirmRequested((payload, onResult) =>
-    modal.open(
-      <Confirmation modal={modal} confirm={payload} onResult={onResult} />
-    )
-  )
-
-  useExtension()
+  const extension = useExtensionRequested()
 
   /* render */
   const key = [currentLang, currentChain, currentCurrency, appKey].join()
@@ -102,24 +78,29 @@ const App = () => {
   const value = { refresh, goBack, setGoBack, modal, authModal }
 
   return deprecatedUI ?? !ready ? null : (
-    <AppProvider value={value} key={key}>
-      <ConfigProvider value={config}>
-        <AuthProvider value={auth}>
-          <Nav />
-          <section className={s.main}>
-            <Header className={s.header} />
-            <section className={isExtension ? s.extension : s.content}>
-              <ErrorBoundary fallback={<ErrorComponent card />} key={pathname}>
-                {routes}
-              </ErrorBoundary>
+    <ExtensionProvider value={extension}>
+      <AppProvider value={value} key={key}>
+        <ConfigProvider value={config}>
+          <AuthProvider value={auth}>
+            <Nav />
+            <section className={s.main}>
+              <Header className={s.header} />
+              <section className={isExtension ? s.extension : s.content}>
+                <ErrorBoundary
+                  fallback={<ErrorComponent card />}
+                  key={pathname}
+                >
+                  {routes}
+                </ErrorBoundary>
+              </section>
             </section>
-          </section>
 
-          <Modal config={modal.config}>{modal.content}</Modal>
-          <ToastContainer {...ToastConfig} autoClose={false} />
-        </AuthProvider>
-      </ConfigProvider>
-    </AppProvider>
+            <Modal config={modal.config}>{modal.content}</Modal>
+            <ToastContainer {...ToastConfig} autoClose={false} />
+          </AuthProvider>
+        </ConfigProvider>
+      </AppProvider>
+    </ExtensionProvider>
   )
 }
 
