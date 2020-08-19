@@ -1,36 +1,43 @@
 /* globals chrome */
+
 chrome.extension.onMessage.addListener((req, sender, sendResponse) => {
   try {
     const request = JSON.parse(req)
+    const { origin } = sender
 
     switch (request.action) {
       case 'connectWallet':
+        const handleChange = (changes, namespace) => {
+          namespace === 'local' &&
+            chrome.storage.local.get(
+              ['connectAllowed', 'wallet'],
+              handleConnectWallet
+            )
+        }
+
+        const handleConnectWallet = ({
+          connectAllowed = [],
+          connectRequested = [],
+          wallet,
+        }) => {
+          if (connectAllowed.includes(origin) && wallet?.address) {
+            sendResponse({ type: 'WALLET', wallet })
+            tabId && chrome.tabs.remove(tabId)
+          } else {
+            ![...connectRequested, ...connectAllowed].includes(origin) &&
+              chrome.storage.local.set({
+                connectRequested: [origin, ...connectRequested],
+              })
+
+            openPopup()
+
+            chrome.storage.onChanged.addListener(handleChange)
+          }
+        }
+
         chrome.storage.local.get(
           ['connectAllowed', 'connectRequested', 'wallet'],
-          ({ connectAllowed = [], connectRequested = [], wallet }) => {
-            if (connectAllowed.includes(sender.origin)) {
-              sendResponse({ type: 'WALLET', wallet })
-            } else {
-              !connectRequested.includes(sender.origin) &&
-                chrome.storage.local.set({
-                  connectRequested: [sender.origin, ...connectRequested],
-                })
-
-              openPopup()
-
-              chrome.storage.onChanged.addListener((changes, namespace) => {
-                if (
-                  namespace === 'local' &&
-                  changes['connectAllowed'] &&
-                  changes['connectAllowed'].newValue.includes(sender.origin)
-                ) {
-                  chrome.storage.local.get(['wallet'], ({ wallet }) =>
-                    sendResponse({ type: 'WALLET', wallet })
-                  )
-                }
-              })
-            }
-          }
+          handleConnectWallet
         )
 
         break
@@ -66,11 +73,14 @@ chrome.extension.onMessage.addListener((req, sender, sendResponse) => {
   }
 })
 
+let tabId = undefined
+
 const openPopup = () => {
   const popup = { type: 'popup', focused: true, width: 480, height: 640 }
   chrome.tabs.create(
     { url: chrome.extension.getURL('index.html'), active: false },
     (tab) => {
+      tabId = tab.id
       chrome.windows.getCurrent((window) => {
         chrome.windows.create({ ...popup, tabId: tab.id, top: window.top })
       })
