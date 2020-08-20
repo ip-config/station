@@ -25,6 +25,7 @@ import AuthModal from '../auth/AuthModal'
 
 import { useExtensionRequested } from '../extension/useExtension'
 import { ExtensionProvider } from '../extension/useExtension'
+import Confirmation from '../post/Confirmation'
 
 import Nav from './Nav'
 import Header from './Header'
@@ -71,6 +72,25 @@ const App = () => {
 
   /* extension */
   const extension = useExtensionRequested()
+
+  /* deprecated: confirm modal */
+  useEffect(() => {
+    chrome.storage.local.get(['confirm'], ({ confirm }) => {
+      const handleResult = () =>
+        chrome.storage.local.set({ confirm: null, posted: 'true' })
+
+      confirm &&
+        modal.open(
+          <Confirmation
+            modal={modal}
+            confirm={{ ...confirm, validate: () => true }}
+            onResult={handleResult}
+          />
+        )
+    })
+
+    // eslint-disable-next-line
+  }, [])
 
   /* render */
   const key = [currentLang, currentChain, currentCurrency, appKey].join()

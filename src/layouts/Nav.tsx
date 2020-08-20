@@ -47,6 +47,7 @@ const Nav = () => {
         <Link to="/" className={s.logo}>
           <TerraStation />
         </Link>
+        <Chain />
       </header>
     </nav>
   ) : (

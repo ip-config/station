@@ -3,30 +3,21 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { without, uniq } from 'ramda'
 import { createContext } from '@terra-money/use-station'
 
-type Confirm = any
-
 interface Extension {
   connect: {
     list: string[]
     allow: (origin: string, allow?: boolean) => void
   }
-
-  confirm: {
-    list: Confirm[]
-    allow: (index: number) => void
-  }
 }
 
 export const useExtensionRequested = (): Extension => {
   const [connectRequested, setConnectRequested] = useState<string[]>([])
-  const [confirmRequested, setConfirmRequested] = useState<Confirm[]>([])
 
   useEffect(() => {
     chrome.storage.local.get(
       ['connectRequested', 'confirmRequested'],
       ({ connectRequested = [], confirmRequested = [] }) => {
         setConnectRequested(connectRequested)
-        setConfirmRequested(confirmRequested)
       }
     )
   }, [])
@@ -44,17 +35,11 @@ export const useExtensionRequested = (): Extension => {
     )
   }
 
-  const allowConfirmation = (index: number) => {
-    const next = confirmRequested.filter((_, i) => i !== index)
-    chrome.storage.local.set({ confirmRequested: next })
-  }
-
   /* Redirect on requested */
   useRedirectConnect(!!connectRequested.length)
 
   return {
     connect: { list: connectRequested, allow: allowConnection },
-    confirm: { list: confirmRequested, allow: allowConfirmation },
   }
 }
 
@@ -69,12 +54,4 @@ export const useRedirectConnect = (redirect: boolean) => {
   useEffect(() => {
     redirect && pathname !== '/connect' && push('/connect')
   }, [redirect, pathname, push])
-}
-
-export const useCheckConfirmRequested = (
-  callback: (payload: any, onResult: () => void) => void
-) => {
-  useEffect(() => {
-    // eslint-disable-next-line
-  }, [])
 }
