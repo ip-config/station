@@ -1,15 +1,10 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import c from 'classnames'
+import { Card } from '@terra-money/use-station'
 import Icon from '../components/Icon'
 import { Item } from './Auth'
 import s from './AuthMenu.module.scss'
-
-interface Props {
-  list: Item[]
-  footer: ReactNode
-  onSelect?: (item: Item) => void
-}
 
 const AuthMenuItem = ({ title, icon, path, disabled }: Omit<Item, 'key'>) => {
   const content = (
@@ -29,8 +24,22 @@ const AuthMenuItem = ({ title, icon, path, disabled }: Omit<Item, 'key'>) => {
   ) : null
 }
 
-const AuthMenu = ({ list, footer }: Props) => (
+interface Props {
+  card?: Card
+  list: Item[]
+  footer: ReactNode
+  onSelect?: (item: Item) => void
+}
+
+const AuthMenu = ({ card, list, footer }: Props) => (
   <>
+    {card && (
+      <header>
+        <h1>{card.title}</h1>
+        <p>{card.content}</p>
+      </header>
+    )}
+
     <div className={s.list}>
       {list.map((item) => (
         <AuthMenuItem {...item} key={item.title} />

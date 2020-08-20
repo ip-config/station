@@ -2153,10 +2153,10 @@
     decimal.js "^10.2.0"
     secp256k1 "^4.0.2"
 
-"@terra-money/use-station@^3.8.11":
-  version "3.8.11"
-  resolved "https://registry.yarnpkg.com/@terra-money/use-station/-/use-station-3.8.11.tgz#7c2a37005d5cde3fe6a1c2cf962e9bbb63e10a38"
-  integrity sha512-eJyabxVXF2pIRGAN2VldbUItwSsdc9nC9XXBAllJu+6gJ+Vd3qRZ1WgnjCMW8d7M9AMFJELx6tgOtj9Ds16tew==
+"@terra-money/use-station@^3.8.13":
+  version "3.8.13"
+  resolved "https://registry.yarnpkg.com/@terra-money/use-station/-/use-station-3.8.13.tgz#e24512996ce0f3d44d96c3c386f92e7e1ebd5239"
+  integrity sha512-8OysVwSaN/QeI9HgOvfjM73B9rVpvI7bA5uMyynmpuwajuRJmJNz4LjqXShr/bOAhEQtRHvgZBGaj9C4zDrPjQ==
   dependencies:
     axios "^0.19.2"
     bech32 "^1.1.3"

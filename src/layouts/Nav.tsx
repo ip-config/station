@@ -42,12 +42,15 @@ const Nav = () => {
   }, [pathname])
 
   return isExtension ? (
-    <nav className={s.nav}>
+    <nav className={c(s.nav, s.extension)}>
       <header className={s.header}>
         <Link to="/" className={s.logo}>
           <TerraStation />
         </Link>
-        <Chain />
+        <div className={s.footer}>
+          <Chain />
+          <Lang />
+        </div>
       </header>
     </nav>
   ) : (

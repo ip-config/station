@@ -110,6 +110,10 @@ $border-bottom: 1px solid fade-out(white, 0.9);
 
 .footer {
   color: white;
+
+  .extension & {
+    @include flex();
+  }
 }
 
 .container {

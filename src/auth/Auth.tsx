@@ -72,7 +72,13 @@ const Auth = () => {
     Object.assign({}, { title: label, key }, components[key])
 
   const footer = !isElectron && !isExtension && <AuthFooter {...ui.web} />
-  const menu = <AuthMenu list={list.map(getItem)} footer={footer} />
+  const menu = (
+    <AuthMenu
+      card={isExtension ? ui.mobile : undefined}
+      list={list.map(getItem)}
+      footer={footer}
+    />
+  )
 
   return (
     <Switch>
