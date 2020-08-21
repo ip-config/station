@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useSignIn } from '@terra-money/use-station'
 import { isExtension } from '../utils/env'
 import { loadKeys, testPassword } from '../utils/localStorage'
@@ -9,8 +9,6 @@ import ManageAccounts from './ManageAccounts'
 import s from './SignIn.module.scss'
 
 const SignIn = () => {
-  const { url } = useRouteMatch()
-
   const accounts = loadKeys()
   const { form, manage } = useSignIn({
     list: accounts,

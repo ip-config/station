@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import c from 'classnames'
 import { useMenu, ErrorBoundary, useConfig } from '@terra-money/use-station'
 import { ReactComponent as TerraStation } from '../images/TerraStation.svg'
 import { isExtension } from '../utils/env'
+import { useExtension } from '../extension/useExtension'
 import Icon from '../components/Icon'
 import NavItem from './NavItem'
 import Guide from './Guide'
@@ -15,8 +16,12 @@ import s from './Nav.module.scss'
 
 const Nav = () => {
   const { pathname } = useLocation()
+  const history = useHistory()
+  const { goBack } = useExtension()
+
   const name = useMenu()
   const { chain } = useConfig()
+
   const isInvalidItem = (to: string) =>
     to === '/contracts' &&
     !['tequila', 'localterra'].includes(chain.current.key)
@@ -44,9 +49,19 @@ const Nav = () => {
   return isExtension ? (
     <nav className={c(s.nav, s.extension)}>
       <header className={s.header}>
-        <Link to="/" className={s.logo}>
-          <TerraStation />
-        </Link>
+        {['/auth', '/wallet'].includes(pathname) ? (
+          <Link to="/" className={s.logo}>
+            <TerraStation />
+          </Link>
+        ) : (
+          <button
+            onClick={() => (goBack ? goBack() : history.goBack())}
+            className={s.logo}
+          >
+            <Icon name="arrow_back" size={20} />
+          </button>
+        )}
+
         <div className={s.footer}>
           <Chain />
           <Lang />

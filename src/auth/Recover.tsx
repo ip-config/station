@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { SignUpNext, Seed } from '@terra-money/use-station'
 import { useSignUp } from '@terra-money/use-station'
 import { generateAddresses, generateWallet } from '../utils'
 import { importKey, loadKeys } from '../utils/localStorage'
+import { useExtensionGoBack } from '../extension/useExtension'
 import Form from '../components/Form'
 import ErrorComponent from '../components/ErrorComponent'
 import Warning from './Warning'
@@ -33,6 +34,12 @@ const Recover = ({ generated }: { generated?: Seed }) => {
 
     return components[next.step]()
   }
+
+  const goBack = useCallback(() => {
+    return next?.step && reset
+    // eslint-disable-next-line
+  }, [next?.step])
+  useExtensionGoBack(goBack)
 
   return error ? (
     <ErrorComponent>{error.message}</ErrorComponent>

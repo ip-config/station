@@ -8,6 +8,10 @@ interface Extension {
     list: string[]
     allow: (origin: string, allow?: boolean) => void
   }
+
+  goBack?: () => void
+  setGoBack: (fn?: () => void) => void
+  resetGoBack: () => void
 }
 
 export const useExtensionRequested = (): Extension => {
@@ -38,8 +42,15 @@ export const useExtensionRequested = (): Extension => {
   /* Redirect on requested */
   useRedirectConnect(!!connectRequested.length)
 
+  /* goBack */
+  const [goBack, setGoBack] = useState<() => void>()
+  const resetGoBack = () => setGoBack(undefined)
+
   return {
     connect: { list: connectRequested, allow: allowConnection },
+    goBack,
+    setGoBack,
+    resetGoBack,
   }
 }
 
@@ -54,4 +65,13 @@ export const useRedirectConnect = (redirect: boolean) => {
   useEffect(() => {
     redirect && pathname !== '/connect' && push('/connect')
   }, [redirect, pathname, push])
+}
+
+export const useExtensionGoBack = (fn?: () => void) => {
+  const { setGoBack, resetGoBack } = useExtension()
+
+  useEffect(() => {
+    setGoBack(fn)
+    return () => resetGoBack()
+  }, [fn, setGoBack, resetGoBack])
 }
