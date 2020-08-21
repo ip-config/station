@@ -24,7 +24,7 @@ const Recover = ({ generated }: { generated?: Seed }) => {
   const [checked, setChecked] = useState(false)
   const toggle = () => setChecked((c) => !c)
 
-  /* render */
+  /* next */
   const renderNext = (next: SignUpNext) => {
     const components = {
       select: () => <SelectAccount {...next} />,

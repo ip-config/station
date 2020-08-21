@@ -13,16 +13,17 @@ import Proposal from '../pages/proposal/Proposal'
 import Contracts from '../pages/contracts/Contracts'
 import Extension from '../extension/Extension'
 
-import Auth from '../auth/Auth'
 import Connect from '../extension/Connect'
+import Auth from '../auth/Auth'
+
 import ErrorComponent from '../components/ErrorComponent'
 
 export default isExtension ? (
   <Switch>
     <Route path="/" component={Extension} exact />
+    <Route path="/connect" component={Connect} />
     <Route path="/wallet" component={Bank} />
     <Route path="/auth" component={Auth} />
-    <Route path="/connect" component={Connect} />
     <Route render={() => <ErrorComponent card />} />
   </Switch>
 ) : (

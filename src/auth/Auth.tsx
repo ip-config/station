@@ -12,6 +12,7 @@ import SignIn from './SignIn'
 import SignInWithAddress from './SignInWithAddress'
 import SignInWithLedger from './SignInWithLedger'
 import Download from './Download'
+import ManageAccounts from './ManageAccounts'
 import getAuthMenuKeys from './getAuthMenuKeys'
 
 export interface Item {
@@ -86,6 +87,7 @@ const Auth = () => {
       <Route path={path + '/select'} component={SignIn} />
       <Route path={path + '/new'} component={SignUp} />
       <Route path={path + '/recover'} component={Recover} />
+      <Route path={path + '/manage'} component={ManageAccounts} />
     </Switch>
   )
 }
